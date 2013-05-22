@@ -1,0 +1,7 @@
+<virtualhost *:80>
+    DocumentRoot <%= @params[:docroot] %>
+    DirectoryIndex index.php
+    <directory <%= @params[:docroot] %>>
+        AllowOverride All
+    </directory>
+</virtualhost>
