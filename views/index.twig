@@ -16,11 +16,34 @@
 
     <div class="span6">
         <h1>What can I make?</h1>
-        <form method="get" action="/ingredient-lookup">
-            <label for="q">Start typing what you have in your cabinet...</label>
-            <input type="text" name="q" id="q">
-        </form>
+        <label for="q">Start typing what you have in your cabinet...</label>
+        <input type="text" name="q" id="q">
+
+
+        <div class="ui-widget" style="margin-top: 2em; font-family: Arial;">
+          Result:
+          <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+        </div>
     </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function(){
+
+        function log( message ) {
+          console.log('ok');
+        }
+
+        $("#q").autocomplete({
+            source: "/ingredient-lookup",
+            minLength: 1,
+            select: function( event, ui ) {
+                console.log('asdasd');
+            }
+        });
+    });
+</script>
 {% endblock %}
