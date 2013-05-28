@@ -1,4 +1,26 @@
 {% extends "layout.twig" %}
 {% block content %}
-yay!
+
+<div class="row">
+    <div class="span6">
+        <h1>I Want A...</h2>
+
+        <dl>
+        {% for recipe in recipes %}
+            <dt><a href="/recipe/{{recipe.id}}">{{recipe.name}}</a></dt>
+            <dd>{{recipe.description}}</dd>
+        {% endfor %}
+        </dl>
+
+    </div>
+
+    <div class="span6">
+        <h1>What can I make?</h1>
+        <form method="get" action="/ingredient-lookup">
+            <label for="q">Start typing what you have in your cabinet...</label>
+            <input type="text" name="q" id="q">
+        </form>
+    </div>
+</div>
+
 {% endblock %}
