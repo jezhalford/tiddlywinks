@@ -39,6 +39,18 @@ $app->get('/', function () use ($app) {
     ));
 });
 
+
+$app->get('/drinks', function () use ($app) {
+
+    $sql = "SELECT * FROM `recipes`";
+    $recipes = $app['db']->fetchAll($sql);
+
+
+    return $app['twig']->render('drinks.twig', array(
+        'recipes' => $recipes
+    ));
+});
+
 $app->get('ingredient-lookup', function (Request $request) use ($app) {
     $sql = "SELECT `name` AS 'label', `name` AS 'value', `id` FROM `ingredients` WHERE `name` LIKE CONCAT('%', ?, '%')";
     $ingredients = $app['db']->fetchAll($sql, array($request->get('term')));
