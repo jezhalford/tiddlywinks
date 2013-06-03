@@ -18,7 +18,7 @@ CREATE TABLE `rinky`.`recipes` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `rinky`.`recipes_ingredients` (
+CREATE TABLE `rinky`.`recipe_ingredient` (
     `ingredient_id` INT(12) NOT NULL,
     `recipe_id` INT(12) NOT NULL,
     `amount` INT(5),
@@ -50,7 +50,7 @@ INSERT INTO `rinky`.`ingredients` (`id`, `name`, `abv`)
         (12, 'Coke', 0);
 
 
-INSERT INTO `rinky`.`recipes_ingredients` (`recipe_id`, `ingredient_id`, `amount`)
+INSERT INTO `rinky`.`recipe_ingredient` (`recipe_id`, `ingredient_id`, `amount`)
     VALUES
         (1, 1, 40), (1, 2, 15), (1, 3, 15), (1, 4, 30),
         (2, 5, 40), (2, 3, 30), (2, 6, 50),
