@@ -2,9 +2,13 @@
 {% block content %}
 
 <div class="row">
-    <div class="span10">
+    <div class="span12">
         <h1>Ballmer Peak Estimation</h1>
-        <p>Based on an average UK adult male, 30 minutes after consuming the indicated drinks.</p>
+        <p>
+            The <a href="http://xkcd.com/323/" target="_blank">Ballmer Peak</a>
+            occurs at blood alcohol concentrations of between 0.129% and 0.138%.
+        </p>
+        <p>Calculations based an average UK adult male, 30 minutes after consuming the indicated drinks.</p>
         <p>
             {% for drink in ballmer.drinks %}
                 <div class="badge badge-success large-badge">{{drink.name}}</div>
@@ -13,17 +17,35 @@
             {% endfor %}
         </p>
     </div>
-    <div class="span2 ballmer-state text-info">
-        <span class="label label-{{ballmer.state}}">{{ballmer.level}}</span>
-    </div>
 </div>
 
 <div class="row">
-    <div class="span10">
+    <div class="span8">
         <div id="chart" style="height: 500px width: 100%"></div>
     </div>
-    <div class="span2">
-        {{ballmer.bac}}
+    <div class="span4 bac text-info">
+        Estimated Blood Alcohol Concentration
+        <span>{{ballmer.bac}}%</span>
+        <div class="ballmer-state text-info">
+            <span class="label label-{{ballmer.state}}">{{ballmer.level}}</span>
+        </div>
+        <p>
+        {% if ballmer.level == 'BELOW' %}
+            Must try harder.
+        {% endif %}
+
+        {% if ballmer.level == 'PERFECT' %}
+            Nice. Now go program up something amazing.
+        {% endif %}
+
+        {% if ballmer.level == 'OVER' %}
+            Maybe take it steady.
+        {% endif %}
+
+        {% if ballmer.level == 'DANGER' %}
+            You might want to slow down.
+        {% endif %}
+        </p>
     </div>
 </div>
 

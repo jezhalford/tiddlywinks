@@ -9,12 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Orm\Query;
 use Silex\Provider\SessionServiceProvider;
-use Rinky\Ballmer;
+use Tiddly\Ballmer;
 
 $app = new Silex\Application();
 
-$app->error(function (\Exception $e, $code) {
-    throw $e;
+$app->error(function (\Exception $e, $code) use ($app) {
+    return $app['twig']->render('error.twig', array(
+        'exception' => $e
+    ));
 });
 
 $app->register(new TwigServiceProvider(), array(
@@ -28,7 +30,7 @@ $app->register(new DoctrineServiceProvider(), array(
     'db.options' => array(
         'driver'    => 'pdo_mysql',
         'host'      => 'localhost',
-        'dbname'    => 'rinky',
+        'dbname'    => 'tiddly',
         'user'      => 'root',
         'password'  => 'password',
         'charset'   => 'utf8',
@@ -41,8 +43,8 @@ $app->register(new DoctrineOrmServiceProvider(), array(
         'mappings' => array(
             array(
                 'type' => 'annotation',
-                'namespace' => 'Rinky\Entity',
-                'path' => __DIR__.'/../src/Rinky/Entity',
+                'namespace' => 'Tiddly\Entity',
+                'path' => __DIR__.'/../src/Tiddly/Entity',
                 ),
         ),
     ),
@@ -57,14 +59,14 @@ $app['twig']->addGlobal('ballmer', $app['session']->get('ballmer'));
 $app->get('/', function () use ($app) {
 
     $drinks = $app['orm.em']
-        ->getRepository('Rinky\Entity\Drink')
+        ->getRepository('Tiddly\Entity\Drink')
         ->createQueryBuilder('r')
         ->setMaxResults(5)
         ->getQuery()
         ->getResult();
 
     $ingredients = $app['orm.em']
-        ->getRepository('Rinky\Entity\Ingredient')
+        ->getRepository('Tiddly\Entity\Ingredient')
         ->createQueryBuilder('i')
         ->setMaxResults(5)
         ->getQuery()
@@ -94,7 +96,7 @@ $app->get('/consume/{drink}', function ($drink) use ($app) {
 
 })->convert('drink', function ($id) use ($app) {
     return $app['orm.em']
-        ->find('Rinky\Entity\Drink', $app->escape($id));
+        ->find('Tiddly\Entity\Drink', $app->escape($id));
 });
 
 $app->get('/recipes/{drink}', function ($drink) use ($app) {
@@ -105,13 +107,13 @@ $app->get('/recipes/{drink}', function ($drink) use ($app) {
 
 })->convert('drink', function ($id) use ($app) {
     return $app['orm.em']
-        ->find('Rinky\Entity\Drink', $app->escape($id));
+        ->find('Tiddly\Entity\Drink', $app->escape($id));
 });
 
 $app->get('/ingredients/{ingredient}', function ($ingredient) use ($app) {
 
     $drinks = $app['orm.em']
-        ->getRepository('Rinky\Entity\Drink')
+        ->getRepository('Tiddly\Entity\Drink')
         ->createQueryBuilder('d')
         ->where(':ingredient MEMBER OF d.ingredients')
         ->setParameter('ingredient', $ingredient->getId())
@@ -125,13 +127,13 @@ $app->get('/ingredients/{ingredient}', function ($ingredient) use ($app) {
 
 })->convert('ingredient', function ($id) use ($app) {
     return $app['orm.em']
-        ->find('Rinky\Entity\Ingredient', $app->escape($id));
+        ->find('Tiddly\Entity\Ingredient', $app->escape($id));
 });
 
 $app->get('/drinks', function () use ($app) {
 
     $drinks = $app['orm.em']
-        ->getRepository('Rinky\Entity\Drink')
+        ->getRepository('Tiddly\Entity\Drink')
         ->findAll();
 
     return $app['twig']->render('drinks.twig', array(
@@ -142,7 +144,7 @@ $app->get('/drinks', function () use ($app) {
 $app->get('/ingredients', function () use ($app) {
 
     $ingredients = $app['orm.em']
-        ->getRepository('Rinky\Entity\Ingredient')
+        ->getRepository('Tiddly\Entity\Ingredient')
         ->findAll();
 
     return $app['twig']->render('ingredients.twig', array(
@@ -153,7 +155,7 @@ $app->get('/ingredients', function () use ($app) {
 $app->get('/ingredient-lookup', function (Request $request) use ($app) {
 
     $ingredients = $app['orm.em']
-        ->getRepository('Rinky\Entity\Ingredient')
+        ->getRepository('Tiddly\Entity\Ingredient')
         ->createQueryBuilder('i')
         ->where('i.name LIKE :name')
         ->setParameter('name', '%' . $request->get('term') . '%')

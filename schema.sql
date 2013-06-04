@@ -1,16 +1,16 @@
 
-DROP DATABASE IF EXISTS `rinky`;
+DROP DATABASE IF EXISTS `tiddly`;
 
-CREATE DATABASE `rinky`;
+CREATE DATABASE `tiddly`;
 
-CREATE TABLE `rinky`.`ingredients` (
+CREATE TABLE `tiddly`.`ingredients` (
     `id` INT(12) NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255),
     `abv` DECIMAL(5.2),
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `rinky`.`recipes` (
+CREATE TABLE `tiddly`.`recipes` (
     `id` INT(12) NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255),
     `instructions` TEXT,
@@ -18,7 +18,7 @@ CREATE TABLE `rinky`.`recipes` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `rinky`.`recipe_ingredient` (
+CREATE TABLE `tiddly`.`recipe_ingredient` (
     `id` INT(12) NOT NULL AUTO_INCREMENT,
     `ingredient_id` INT(12) NOT NULL,
     `recipe_id` INT(12) NOT NULL,
@@ -29,13 +29,13 @@ CREATE TABLE `rinky`.`recipe_ingredient` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-INSERT INTO `rinky`.`recipes` (`id`, `name`, `instructions`, `description`)
+INSERT INTO `tiddly`.`recipes` (`id`, `name`, `instructions`, `description`)
     VALUES
         (1, 'Cosmopolitan', 'Add all ingredients into cocktail shaker filled with ice. Shake well and double strain into large cocktail glass. Garnish with lime wheel.', 'Pink, stylish and delicious.'),
         (2, 'Mojito', 'Mint sprigs muddled with sugar and lime juice. Rum added and topped with soda water. Garnished with sprig of mint leaves. Served with a straw.', 'A traditional cuban highball cocktail.'),
         (3, 'Long Island Iced Tea', 'Mix ingredients in glass over ice, stir, garnish and serve.', 'A very strong cocktail that does not contain tea.');
 
-INSERT INTO `rinky`.`ingredients` (`id`, `name`, `abv`)
+INSERT INTO `tiddly`.`ingredients` (`id`, `name`, `abv`)
     VALUES
         (1, 'Vodka', 41),
         (2, 'Cointreau', 40),
@@ -50,8 +50,7 @@ INSERT INTO `rinky`.`ingredients` (`id`, `name`, `abv`)
         (11, 'Sugar Syrup', 0),
         (12, 'Coke', 0);
 
-
-INSERT INTO `rinky`.`recipe_ingredient` (`recipe_id`, `ingredient_id`, `amount`)
+INSERT INTO `tiddly`.`recipe_ingredient` (`recipe_id`, `ingredient_id`, `amount`)
     VALUES
         (1, 1, 40), (1, 2, 15), (1, 3, 15), (1, 4, 30),
         (2, 5, 40), (2, 3, 30), (2, 6, 50),
