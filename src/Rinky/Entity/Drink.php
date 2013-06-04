@@ -34,6 +34,10 @@ class Drink
 
     /**
      * @ManyToMany(targetEntity="Ingredient")
+     * @JoinTable(name="recipe_ingredient",
+     *      joinColumns={@JoinColumn(name="recipe_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="ingredient_id", referencedColumnName="id")}
+     *      )
      **/
     protected $ingredients;
 

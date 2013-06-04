@@ -1,7 +1,17 @@
+h1 {
+    font-size: 56pt;
+    margin-bottom: 20px;
+    line-height: 1;
+}
+
+p.backlink {
+    margin-top: 100px;
+}
+
 div.abv {
-    font-size: 6em;
+    font-size: 56pt;
     font-weight: bold;
-    padding-top: 250px;
+    margin-top: 35px;
 }
 
 div.abv span {
@@ -13,4 +23,31 @@ div.abv span {
 #chart {
     width: 100%;
     height: 400px;
+}
+
+#query {
+    font-size: 2em;
+    height: 35px;
+    width: 90%;
+}
+
+#selected {
+    width: 85%;
+}
+
+#selected div.badge {
+    font-size: 2em;
+    margin: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#suggested {
+    margin-top: 15px;
+}
+
+#suggested div {
+    border-bottom: 1px solid #c0c0c0;
+    width: 85%;
+    padding-bottom: 10px;
 }

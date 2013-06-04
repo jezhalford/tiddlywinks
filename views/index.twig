@@ -2,8 +2,18 @@
 {% block content %}
 
 <div class="row">
-    <div class="span6">
-        <h1>I Want A...</h2>
+    <div class="span9">
+        <h1>What can I make?</h1>
+        <label for="query">Start typing what you have in your cabinet...</label>
+        <input type="text" id="query">
+
+        <div id="selected"></div>
+
+        <div id="suggested"></div>
+    </div>
+
+    <div class="span3">
+        <h2>I Want A...</h2>
 
         <dl>
         {% for drink in drinks %}
@@ -12,10 +22,8 @@
         {% endfor %}
         </dl>
         <a href="/recipes" class="btn btn-link">View all drinks...</a>
-    </div>
 
-    <div class="span6">
-        <h1>What can I make with...</h1>
+        <h2>What can I make with...</h2>
         <ul>
         {% for ingredient in ingredients %}
             <li><a href="/ingredients/{{ingredient.id}}">{{ingredient.name}}</a></li>
@@ -26,21 +34,6 @@
 
 </div>
 
-<div class="row">
-    <div class="span6">
-        <h1>What can I make?</h1>
-        <label for="query">Start typing what you have in your cabinet...</label>
-        <input type="text" id="query">
-
-        <div class="ui-widget">
-          <div id="selected" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
-        </div>
-
-        <div class="ui-widget">
-          <div id="suggested" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
-        </div>
-    </div>
-</div>
 
 {% endblock %}
 
@@ -48,8 +41,14 @@
 <script>
   $(document).ready(function() {
 
+    $(document).on('click', '#selected div.badge', function(){
+        $(this).remove();
+        searchForDrinks();
+    });
+
     function searchForDrinks() {
 
+        $('#suggested div').remove();
         var list = [];
 
         $('#selected div').each(function(){
@@ -59,12 +58,14 @@
         $.getJSON('/recipe-lookup', {'ingredients' : list.join(',')}, function(data) {
 
             $(data).each(function(){
-                if($('#suggested div[data-id=' + this.id + ']').length > 0) {
-                    return;
-                }
-
-                $( "<div>" ).text(this.recipe).attr('data-id', this.id).prependTo("#suggested");
-                $( "#suggested" ).scrollTop( 0 );
+                $( "<div>" )
+                    .html([
+                        '<a href="/recipes/' + this.id + '" class="btn btn-info pull-right">View &gt;</a>',
+                        '<h2>' + this.recipe + '</h2>',
+                        '<p>' + this.description + '</p>',
+                        ].join(''))
+                    .attr('data-id', this.id)
+                    .prependTo("#suggested");
             });
         });
     }
@@ -75,8 +76,11 @@
             return;
         }
 
-        $( "<div>" ).text(name).attr('data-id', id).prependTo("#selected");
-        $( "#selected" ).scrollTop( 0 );
+        $('<div class="badge badge-success" title="Click to remove">')
+            .text(name)
+            .attr('data-id', id)
+            .prependTo('#selected');
+
         searchForDrinks();
     }
 
@@ -98,3 +102,5 @@
 </script>
 
 {% endblock %}
+
+{% block backlink %}{% endblock %}

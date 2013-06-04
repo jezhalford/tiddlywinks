@@ -79,8 +79,17 @@ $app->get('/recipes/{drink}', function ($drink) use ($app) {
 
 $app->get('/ingredients/{ingredient}', function ($ingredient) use ($app) {
 
+    $drinks = $app['orm.em']
+        ->getRepository('Rinky\Entity\Drink')
+        ->createQueryBuilder('d')
+        ->where(':ingredient MEMBER OF d.ingredients')
+        ->setParameter('ingredient', $ingredient->getId())
+        ->getQuery()
+        ->getResult();
+
     return $app['twig']->render('ingredient.twig', array(
-        'ingredient' => $ingredient
+        'ingredient' => $ingredient,
+        'foundIn' => $drinks
     ));
 
 })->convert('ingredient', function ($id) use ($app) {
@@ -140,7 +149,7 @@ $app->get('/recipe-lookup', function (Request $request) use ($app) {
 
     $placeholders = array_fill(0, count($ingredients), '?');
 
-    $sql = sprintf("SELECT r.name as recipe, r.id as id, COUNT(i.id) AS ingredients,
+    $sql = sprintf("SELECT r.name as recipe, r.id as id, COUNT(i.id) AS ingredients, r.description AS description,
             (SELECT COUNT(sri.ingredient_id) FROM recipe_ingredient sri WHERE sri.recipe_id = r.id) as c
             FROM
             recipes r

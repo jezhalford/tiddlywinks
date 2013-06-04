@@ -1,6 +1,41 @@
 {% extends "layout.twig" %}
 {% block content %}
 
-<h1>{{ingredient.name}}</h1>
+<div class="row">
+    <div class="span6">
+        <h1>{{ingredient.name}}</h1>
+    </div>
+    <div class="span6 abv text-info ingredient-abv">
+        {{ingredient.abv|number_format(2, '.', ',')}}%
+        <span>ABV (approx.)</span>
+    </div>
+</div>
 
+<div class="row">
+    <div class="span12">
+        <dl>
+        {% for drink in foundIn %}
+            <dt>
+                <h2>{{drink.name}}</h2>
+            </dt>
+            <dd>
+                <p>{{drink.description}}</p>
+                <p>
+                    <strong>You'll also need:</strong>
+                    {% for otherIngredient in drink.ingredients %}
+                        {% if otherIngredient.id != ingredient.id %}
+                            <a href="/ingredients/{{otherIngredient.id}}" class="btn-link">
+                                {{otherIngredient.name}}{% if not loop.last %}, {% endif %}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </p>
+                <p>
+                    <a href="/recipes/{{drink.id}}" class="btn btn-info">View &gt;</a>
+                </p>
+            </dd>
+        {% endfor %}
+        </dl>
+    </div>
+</div>
 {% endblock %}

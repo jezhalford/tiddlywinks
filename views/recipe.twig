@@ -1,21 +1,22 @@
 {% extends "layout.twig" %}
 {% block content %}
 
-<h1>{{drink.name}}</h1>
-
-<p>{{drink.description}}</p>
-
 <div class="row">
-    <div class="span8">
-        <div id="chart"></div>
+    <div class="span6">
+        <h1>{{drink.name}}</h1>
+        <p>{{drink.description}}</p>
     </div>
-    <div class="span4 abv text-info">
+    <div class="span6 abv text-info">
         {{drink.abv|number_format(2, '.', ',')}}%
         <span>ABV (approx.)</span>
     </div>
 </div>
+
 <div class="row">
-    <div class="span8">
+    <div class="span6">
+        <div id="chart"></div>
+    </div>
+    <div class="span6">
         {{drink.instructions}}
     </div>
 </div>
