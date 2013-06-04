@@ -76,10 +76,26 @@ $app->get('/', function () use ($app) {
     ));
 });
 
+$app->get('/ballmer/clear', function () use ($app) {
+    $app['session']->get('ballmer')->clearDrinks();
+
+    return $app->redirect('/ballmer');
+});
+
 $app->get('/ballmer', function () use ($app) {
     return $app['twig']->render('ballmer.twig');
 });
 
+$app->get('/consume/{drink}', function ($drink) use ($app) {
+
+    $app['session']->get('ballmer')->consume($drink);
+
+    return $app->redirect('/ballmer');
+
+})->convert('drink', function ($id) use ($app) {
+    return $app['orm.em']
+        ->find('Rinky\Entity\Drink', $app->escape($id));
+});
 
 $app->get('/recipes/{drink}', function ($drink) use ($app) {
 

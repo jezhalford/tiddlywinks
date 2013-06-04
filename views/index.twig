@@ -65,6 +65,7 @@
                         '<p>' + this.description + '</p>',
                         ].join(''))
                     .attr('data-id', this.id)
+                    .attr('class', 'drinks-container')
                     .prependTo("#suggested");
             });
         });
@@ -76,7 +77,7 @@
             return;
         }
 
-        $('<div class="badge badge-success" title="Click to remove">')
+        $('<div class="badge badge-success large-badge" title="Click to remove">')
             .text(name)
             .attr('data-id', id)
             .prependTo('#selected');

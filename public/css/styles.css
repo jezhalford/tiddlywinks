@@ -42,7 +42,7 @@ div.abv span {
     width: 85%;
 }
 
-#selected div.badge {
+div.badge.large-badge {
     font-size: 2em;
     margin: 10px;
     padding: 10px;
@@ -62,4 +62,10 @@ div.abv span {
 .ballmer-state span.label {
     font-size: 4em;
     padding: 20px 40px;
+}
+
+.btn-consume {
+    margin-top: 50px;
+    font-size: 2em;
+    padding: 8px 24px;
 }

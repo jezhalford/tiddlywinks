@@ -85,8 +85,7 @@ class Drink
         return $this->recipeIngredients;
     }
 
-    public function getAbv()
-    {
+    protected function alcoholCalculations() {
         $totalVolume = 0;
 
         $alcoholValue = 0;
@@ -96,6 +95,27 @@ class Drink
             $alcoholValue += $recipeIngredient->getAmount() * ($recipeIngredient->getIngredient()->getAbv() / 100);
         }
 
-        return ($alcoholValue / $totalVolume) * 100;
+        return array('alc_vol' => $alcoholValue, 'total_vol' => $totalVolume);
+    }
+
+    public function getAbv()
+    {
+        $numbers = $this->alcoholCalculations();
+
+        return ($numbers['alc_vol'] / $numbers['total_vol']) * 100;
+    }
+
+    public function getAlcoholVolume()
+    {
+        $numbers = $this->alcoholCalculations();
+
+        return $numbers['alc_vol'];
+    }
+
+    public function getTotalVolume()
+    {
+        $numbers = $this->alcoholCalculations();
+
+        return $numbers['total_vol'];
     }
 }
