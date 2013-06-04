@@ -8,6 +8,8 @@ use Silex\Provider\TwigServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Orm\Query;
+use Silex\Provider\SessionServiceProvider;
+use Rinky\Ballmer;
 
 $app = new Silex\Application();
 
@@ -19,6 +21,8 @@ $app->register(new TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../views',
     'debug' => true
 ));
+
+$app->register(new SessionServiceProvider());
 
 $app->register(new DoctrineServiceProvider(), array(
     'db.options' => array(
@@ -44,6 +48,12 @@ $app->register(new DoctrineOrmServiceProvider(), array(
     ),
 ));
 
+if($app['session']->get('ballmer') == null) {
+    $app['session']->set('ballmer', new Ballmer($app['session']));
+}
+
+$app['twig']->addGlobal('ballmer', $app['session']->get('ballmer'));
+
 $app->get('/', function () use ($app) {
 
     $drinks = $app['orm.em']
@@ -65,6 +75,11 @@ $app->get('/', function () use ($app) {
         'ingredients' => $ingredients,
     ));
 });
+
+$app->get('/ballmer', function () use ($app) {
+    return $app['twig']->render('ballmer.twig');
+});
+
 
 $app->get('/recipes/{drink}', function ($drink) use ($app) {
 
