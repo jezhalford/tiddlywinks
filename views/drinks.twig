@@ -3,13 +3,13 @@
 
 <div class="row">
     <div class="span12">
-        <h1>I Want A...</h2>
+        <h1>I Want A...</h1>
 
         <dl>
-        {% for recipe in recipes %}
-            <dt><a href="/recipe/{{recipe.id}}">{{recipe.name}}</a></dt>
+        {% for drink in drinks %}
+            <dt><a href="/recipes/{{drink.id}}">{{drink.name}}</a></dt>
             <dd>
-                <p>{{recipe.description}}</p>
+                <p>{{drink.description}}</p>
             </dd>
         {% endfor %}
         </dl>

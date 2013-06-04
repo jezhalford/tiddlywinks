@@ -21,6 +21,11 @@ class Ingredient
     protected $name;
 
     /**
+     * @OneToMany(targetEntity="RecipeIngredient", mappedBy="ingredients")
+     */
+    private $recipeIngredients;
+
+    /**
      * @Column(type="decimal", name="abv")
      */
     protected $abv;

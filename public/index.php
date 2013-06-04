@@ -7,6 +7,7 @@ use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\Orm\Query;
 
 $app = new Silex\Application();
 
@@ -43,27 +44,69 @@ $app->register(new DoctrineOrmServiceProvider(), array(
     ),
 ));
 
-
 $app->get('/', function () use ($app) {
 
-    $sql = "SELECT * FROM `recipes` LIMIT 8";
-    $recipes = $app['db']->fetchAll($sql);
+    $drinks = $app['orm.em']
+        ->getRepository('Rinky\Entity\Drink')
+        ->createQueryBuilder('r')
+        ->setMaxResults(5)
+        ->getQuery()
+        ->getResult();
 
+    $ingredients = $app['orm.em']
+        ->getRepository('Rinky\Entity\Ingredient')
+        ->createQueryBuilder('i')
+        ->setMaxResults(5)
+        ->getQuery()
+        ->getResult();
 
     return $app['twig']->render('index.twig', array(
-        'recipes' => $recipes
+        'drinks' => $drinks,
+        'ingredients' => $ingredients,
     ));
 });
 
+$app->get('/recipes/{drink}', function ($drink) use ($app) {
+
+    return $app['twig']->render('recipe.twig', array(
+        'drink' => $drink
+    ));
+
+})->convert('drink', function ($id) use ($app) {
+    return $app['orm.em']
+        ->find('Rinky\Entity\Drink', $app->escape($id));
+});
+
+$app->get('/ingredients/{ingredient}', function ($ingredient) use ($app) {
+
+    return $app['twig']->render('ingredient.twig', array(
+        'ingredient' => $ingredient
+    ));
+
+})->convert('ingredient', function ($id) use ($app) {
+    return $app['orm.em']
+        ->find('Rinky\Entity\Ingredient', $app->escape($id));
+});
 
 $app->get('/drinks', function () use ($app) {
 
-    $recipes = $app['orm.em']
-        ->getRepository('Rinky\Entity\Recipe')
+    $drinks = $app['orm.em']
+        ->getRepository('Rinky\Entity\Drink')
         ->findAll();
 
     return $app['twig']->render('drinks.twig', array(
-        'recipes' => $recipes
+        'drinks' => $drinks
+    ));
+});
+
+$app->get('/ingredients', function () use ($app) {
+
+    $ingredients = $app['orm.em']
+        ->getRepository('Rinky\Entity\Ingredient')
+        ->findAll();
+
+    return $app['twig']->render('ingredients.twig', array(
+        'ingredients' => $ingredients
     ));
 });
 
@@ -109,7 +152,7 @@ $app->get('/recipe-lookup', function (Request $request) use ($app) {
 
     $recipes = $app['db']->fetchAll($sql, $ingredients);
 
-    return new Response(json_encode($recipes), 200, array('Content-Type' => 'application/json'));
+    return new Response(json_encode($recipes, true), 200, array('Content-Type' => 'application/json'));
 
 });
 

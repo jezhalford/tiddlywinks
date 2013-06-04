@@ -19,10 +19,11 @@ CREATE TABLE `rinky`.`recipes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `rinky`.`recipe_ingredient` (
+    `id` INT(12) NOT NULL AUTO_INCREMENT,
     `ingredient_id` INT(12) NOT NULL,
     `recipe_id` INT(12) NOT NULL,
     `amount` INT(5),
-    PRIMARY KEY (`ingredient_id`, `recipe_id`),
+    PRIMARY KEY (`id`),
     CONSTRAINT `fk_ingredients` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredients`(`id`),
     CONSTRAINT `fk_recipe` FOREIGN KEY (`recipe_id`) REFERENCES `recipes`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -1,0 +1,17 @@
+{% extends "layout.twig" %}
+{% block content %}
+
+<div class="row">
+    <div class="span12">
+        <h1>Ingredients</h1>
+
+        <ul>
+        {% for ingredient in ingredients %}
+            <li><a href="/ingredients/{{ingredient.id}}">{{ingredient.name}}</a></li>
+        {% endfor %}
+        </ul>
+
+    </div>
+</div>
+
+{% endblock %}

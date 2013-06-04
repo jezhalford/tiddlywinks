@@ -1,0 +1,43 @@
+{% extends "layout.twig" %}
+{% block content %}
+
+<h1>{{drink.name}}</h1>
+
+<p>{{drink.description}}</p>
+
+<div class="row">
+    <div class="span8">
+        <div id="chart"></div>
+    </div>
+    <div class="span4 abv text-info">
+        {{drink.abv|number_format(2, '.', ',')}}%
+        <span>ABV (approx.)</span>
+    </div>
+</div>
+<div class="row">
+    <div class="span8">
+        {{drink.instructions}}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://www.google.com/jsapi"></script>
+<script>
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+        ['Ingredient', 'ml'],
+        {% for recipeIngredient in drink.recipeIngredients %}
+            ['{{recipeIngredient.ingredient.name}}, {{recipeIngredient.amount}}ml',
+            {{recipeIngredient.amount}}]{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ]);
+
+    var chart = new google.visualization.PieChart(document.getElementById('chart'));
+    chart.draw(data, {});
+  }
+</script>
+{% endblock %}
